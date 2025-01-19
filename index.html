@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QR Code Generator</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+            }
+            .container {
+                width: 50%;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 20px;
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+                margin-top: 50px;
+            }
+            h1 {
+                text-align: center;
+                color: #18092e;
+            }
+            form {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            input {
+                padding: 10px;
+                width: 50%;
+                height: auto;
+                border: 1px solid #ffffff;
+                color: #ebebeb;background-color: rgb(255, 255, 255);
+                border-color: #501aa1;
+                border-radius: 12px;
+                margin-right: 10px;
+                -webkit-text-fill-color: #3146ce;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: hsl(243, 60%, 49%);
+                color: #fff;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #3146ce;
+            }
+            #qrcode {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>QR Code Generator</h1>
+            <form id="qrForm">
+                <!-- <label>Enter Text OR liNK:</label> -->
+                <input type="text" id="text" required placeholder="Enter text or link">
+                <button type="button" onclick="generateQRCode()">Generate</button>
+            </form>
+            <div id="qrcode"></div>
+        </div>
+
+        <script>
+            function generateQRCode() {
+                var text = document.getElementById('text').value;
+                var qrCodeDiv = document.getElementById('qrcode');
+                qrCodeDiv.innerHTML = '';
+                
+                fetch(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        var img = document.createElement('img');
+                        img.src = URL.createObjectURL(blob);
+                        qrCodeDiv.appendChild(img);
+                    })
+                    .catch(error => console.error('Error generating QR code:', error));
+            }
+        </script>
+    </body>
+</html>
